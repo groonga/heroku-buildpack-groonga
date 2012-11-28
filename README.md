@@ -1,6 +1,6 @@
 # Heroku buildpack: groonga
 
-This is a Heroku buildpack of groonga(http://groonga.org/).
+This is a Heroku buildpack of [groonga](http://groonga.org/).
 
 ## Usage:
 
