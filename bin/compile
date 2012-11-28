@@ -16,6 +16,9 @@ rm groonga-$GROONGA_VERSION.tgz
 export PATH=$PATH:$1/vendor/groonga/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$1/vendor/groonga/lib
 
+echo "-----> Modifying groonga-httpd.conf"
+sed --in-place -e "s|# groonga_database /path/to/groonga/db;|    groonga_database $1/$GROONGA_DATABASE_PATH;|" $1/vendor/groonga/etc/groonga/httpd/groonga-httpd.conf
+
 echo "-----> Creating groonga database"
 groonga -n $GROONGA_DATABASE_PATH
 
