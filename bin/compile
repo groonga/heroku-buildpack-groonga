@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+GROONGA_VERSION=2.0.8
+
+echo "-----> Installing groonga $VERSION"
+
+cd $1
+
+curl http://cloud.github.com/downloads/groonga/heroku-buildpack-groonga/groonga-$GROONGA_VERSION.tgz -s -O
+mkdir -p vendor/groonga
+tar -C vendor/groonga -xf groonga-$GROONGA_VERSION.tgz
+rm groonga-$GROONGA_VERSION.tgz
+
+export PATH=$PATH:$1/vendor/groonga/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$1/vendor/groonga/lib
+
+echo "-----> Loading data.grn"
+groonga --file data.grn -n database
