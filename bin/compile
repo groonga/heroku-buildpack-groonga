@@ -2,7 +2,7 @@
 # bin/compile <build-dir> <cache-dir>
 
 GROONGA_VERSION=2.0.8
-GROONGA_DATABASE_PATH=database
+GROONGA_DATABASE_PATH=groonga/database
 
 echo "-----> Installing groonga $VERSION"
 
