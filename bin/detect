@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # bin/detect <build-dir>
 
-if [ -f $1/data.grn ]; then
+if [ -d $1/groonga ]; then
   echo "groonga" && exit 0
 else
   echo "no" && exit 1

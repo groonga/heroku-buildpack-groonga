@@ -6,6 +6,13 @@ This is a Heroku buildpack of groonga(http://groonga.org/).
 
     heroku create --stack cedar --buildpack https://github.com/groonga/heroku-buildpack-groonga.git
 
-Create `data.grn` on the root of your project and push it to heroku.
+Create `groonga` on the root of your project and place `*.grn` files in the directory.
+`*.grn` files will be loaded in the dictionary order of their file names.
+
+    mkdir -p groonga
+    vi groonga/0.grn
+    vi groonga/1.grn
+
+Then push them to heroku.
 
     git push heroku master

@@ -2,6 +2,7 @@
 # bin/compile <build-dir> <cache-dir>
 
 GROONGA_VERSION=2.0.8
+GROONGA_DATABASE_PATH=database
 
 echo "-----> Installing groonga $VERSION"
 
@@ -15,5 +16,8 @@ rm groonga-$GROONGA_VERSION.tgz
 export PATH=$PATH:$1/vendor/groonga/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$1/vendor/groonga/lib
 
-echo "-----> Loading data.grn"
-groonga --file data.grn -n database
+echo "-----> Creating groonga database"
+groonga -n $GROONGA_DATABASE_PATH
+
+echo "-----> Loading data"
+find groonga -name "*.grn" | sort | xargs -t -I % -n 1 -P 1 groonga --file % $GROONGA_DATABASE_PATH
