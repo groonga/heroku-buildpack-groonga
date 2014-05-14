@@ -1,8 +1,11 @@
-#!/usr/bin/env bash
-# bin/detect <build-dir>
+#!/usr/bin/env ruby
 
-if [ -d $1/groonga ]; then
-  echo "groonga" && exit 0
+build_dir = ARGV[0]
+
+if File.exist?(File.join(build_dir, "groonga"))
+  puts("groonga")
+  exit(true)
 else
-  echo "no" && exit 1
-fi
+  puts("no")
+  exit(false)
+end
