@@ -1,26 +1,37 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ruby
 # bin/compile <build-dir> <cache-dir>
 
-GROONGA_VERSION=2.0.9
-GROONGA_DATABASE_PATH=groonga/database
+require "fileutils"
 
-echo "-----> Installing groonga $VERSION"
+build_dir, cache_dir, env_dir, = ARGV
 
-cd $1
+version = "4.0.1"
+database_path = "groonga/database"
 
-curl http://cloud.github.com/downloads/groonga/heroku-buildpack-groonga/groonga-$GROONGA_VERSION.tgz -s -O
-mkdir -p vendor/groonga
-tar -C vendor/groonga -xf groonga-$GROONGA_VERSION.tgz
-rm groonga-$GROONGA_VERSION.tgz
+Dir.chdir(build_dir) do
+  puts("-----> Installing Groonga #{version}")
 
-export PATH=$PATH:$1/vendor/groonga/bin
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$1/vendor/groonga/lib
+  base_name = "heroku-groonga-#{version}.tar.xz"
+  system("curl",
+         "--silent",
+         "--remote-name",
+         "http://groonga-builder.herokuapp.com/#{base_name}")
+  system("tar", "xf", base_name)
+  FileUtils.rm(base_name)
 
-echo "-----> Modifying groonga-httpd.conf"
-sed --in-place -e "s|# groonga_database /path/to/groonga/db;|groonga_database /app/$GROONGA_DATABASE_PATH;|" $1/vendor/groonga/etc/groonga/httpd/groonga-httpd.conf
+  puts("-----> Creating groonga database")
+  ENV["PATH"] = [
+    "#{build_dir}/vendor/groonga/bin",
+    ENV["PATH"],
+  ].join(File::PATH_SEPARATOR)
+  ENV["LD_LIBRARY_PATH"] = [
+    "#{build_dir}/vendor/groonga/lib",
+    ENV["LD_LIBRARY_PATH"],
+  ].join(File::PATH_SEPARATOR)
+  system("groonga", "-n", database_path, "quit")
 
-echo "-----> Creating groonga database"
-groonga -n $GROONGA_DATABASE_PATH quit
-
-echo "-----> Loading data"
-find groonga -name "*.grn" | sort | xargs -t -I % -n 1 -P 1 groonga --file % $GROONGA_DATABASE_PATH
+  puts("-----> Loading data")
+  Dir.glob("groonga/*.grn").sort.each do |grn|
+    system("groonga", "--file", grn, database_path)
+  end
+end

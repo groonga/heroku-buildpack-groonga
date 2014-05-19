@@ -1,9 +1,29 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ruby
 
-echo "---"
-echo "addons:"
-echo "config_vars:"
-echo "  PATH: $PATH:/app/vendor/groonga/bin:/app/vendor/groonga/sbin"
-echo "  LD_LIBRARY_PATH: $LD_LIBRARY_PATH:/app/vendor/groonga/lib"
-echo "default_process_types:"
-echo "  web: sed --in-place -e \"s/10041/\$PORT/\" /app/vendor/groonga/etc/groonga/httpd/groonga-httpd.conf && /app/vendor/groonga/sbin/groonga-httpd -g \"daemon off;\""
+require "yaml"
+
+build_dir = ARGV.first
+
+release = {}
+
+release["addons"] = []
+
+paths = [
+  File.join(build_dir, "vendor", "local", "bin"),
+  File.join(build_dir, "vendor", "local", "sbin"),
+  ENV["PATH"],
+]
+ld_library_paths = [
+  File.join(build_dir, "vendor", "local", "lib"),
+  ENV["LD_LIBRARY_PATH"],
+]
+release["config_vars"] = {
+  "PATH"            => paths.join(":"),
+  "LD_LIBRARY_PATH" => ld_library_paths.compact.join(":"),
+}
+
+release["default_process_types"] = {
+  "web" => "groonga-httpd",
+}
+
+puts(release.to_yaml)
