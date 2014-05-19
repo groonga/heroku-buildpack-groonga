@@ -26,7 +26,7 @@ release["config_vars"] = {
 }
 
 release["default_process_types"] = {
-  "web" => "groonga-httpd",
+  "web" => "env; groonga-httpd",
 }
 
 groonga_httpd_conf_dir = File.join(groonga_dir, "etc", "groonga", "httpd")
