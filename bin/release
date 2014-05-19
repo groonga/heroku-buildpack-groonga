@@ -4,17 +4,20 @@ require "yaml"
 
 build_dir = ARGV.first
 
+database_path = File.join(build_dir, "groonga", "database")
+groonga_dir = File.join(build_dir, "vendor", "groonga")
+
 release = {}
 
 release["addons"] = []
 
 paths = [
-  File.join(build_dir, "vendor", "local", "bin"),
-  File.join(build_dir, "vendor", "local", "sbin"),
+  File.join(groonga_dir, "bin"),
+  File.join(groonga_dir, "sbin"),
   ENV["PATH"],
 ]
 ld_library_paths = [
-  File.join(build_dir, "vendor", "local", "lib"),
+  File.join(groonga_dir, "lib"),
   ENV["LD_LIBRARY_PATH"],
 ]
 release["config_vars"] = {
@@ -25,5 +28,47 @@ release["config_vars"] = {
 release["default_process_types"] = {
   "web" => "groonga-httpd",
 }
+
+groonga_httpd_conf_dir = File.join(groonga_dir, "etc", "groonga", "httpd")
+groonga_httpd_conf = File.join(groonga_httpd_conf_dir, "groonga-httpd.conf")
+File.open(groonga_httpd_conf, "w") do |conf|
+  conf.puts(<<-CONF)
+worker_processes 1;
+
+daemon off;
+
+events {
+  worker_connections 1024;
+}
+
+http {
+  include mime.types;
+  default_type application/octet-stream;
+  sendfile on;
+  keepalive_timeout 65;
+
+  groonga_database #{database_path};
+
+  server {
+    listen #{ENV["PORT"]};
+    server_name localhost;
+
+    location /d/ {
+      groonga on;
+    }
+
+    location / {
+      root #{File.join(groonga_httpd_conf_dir, "admin")};
+      index index.html;
+    }
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+      root html;
+    }
+  }
+}
+  CONF
+end
 
 puts(release.to_yaml)
