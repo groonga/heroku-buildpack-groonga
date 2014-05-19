@@ -4,8 +4,9 @@ require "yaml"
 
 build_dir = ARGV.first
 
-database_path = File.join(build_dir, "groonga", "database")
-groonga_dir = File.join(build_dir, "vendor", "groonga")
+base_dir = Dir.pwd
+database_path = File.join(base_dir, "groonga", "database")
+groonga_dir = File.join(base_dir, "vendor", "groonga")
 
 release = {}
 
@@ -26,7 +27,7 @@ release["config_vars"] = {
 }
 
 release["default_process_types"] = {
-  "web" => "env; groonga-httpd",
+  "web" => "groonga-httpd",
 }
 
 groonga_httpd_conf_dir = File.join(groonga_dir, "etc", "groonga", "httpd")
