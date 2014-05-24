@@ -30,7 +30,7 @@ release["config_vars"] = {
 }
 
 release["default_process_types"] = {
-  "web" => "groonga-httpd",
+  "web" => "sed -i'' -e \"s/%PORT%/$PORT/g\" && groonga-httpd",
 }
 
 app_groonga_httpd_conf_dir =
@@ -58,7 +58,7 @@ http {
   groonga_database #{database_path};
 
   server {
-    listen #{ENV["PORT"]};
+    listen %PORT%;
     server_name localhost;
 
     location /d/ {
