@@ -29,12 +29,11 @@ release["config_vars"] = {
   "LD_LIBRARY_PATH" => ld_library_paths.compact.join(File::PATH_SEPARATOR),
 }
 
-release["default_process_types"] = {
-  "web" => "sed -i'' -e \"s/%PORT%/$PORT/g\" && groonga-httpd",
-}
-
 app_groonga_httpd_conf_dir =
   File.join(app_groonga_dir, "etc", "groonga", "httpd")
+app_groonga_httpd_conf =
+  File.join(app_groonga_httpd_conf_dir, "groonga-httpd.conf")
+
 build_groonga_httpd_conf_dir =
   File.join(build_groonga_dir, "etc", "groonga", "httpd")
 build_groonga_httpd_conf =
@@ -78,5 +77,9 @@ http {
 }
   CONF
 end
+
+release["default_process_types"] = {
+  "web" => "sed -i'' -e \"s/%PORT%/$PORT/g\" #{app_groonga_httpd_conf} && groonga-httpd",
+}
 
 puts(release.to_yaml)
