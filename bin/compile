@@ -21,6 +21,31 @@ def ruby(*command_line)
   sh(*command_line)
 end
 
+def remove_needless_files(prefix)
+  rm(Dir.glob("#{prefix}/lib/**/*.a"))
+  rm_r("#{prefix}/share/groonga/examples")
+  rm_r("#{prefix}/share/groonga/images")
+end
+
+def link_executales(prefix)
+  executable_dirs = ["bin", "sbin"]
+  executable_dirs.each do |executable_dir|
+    mkdir_p(executable_dir)
+    Dir.chdir(executable_dir) do
+      ln_s(Dir.glob("../#{prefix}/#{executable_dir}/*"), ".")
+    end
+  end
+end
+
+def fix_prefix_in_pc(prefix, real_prefix)
+  pc_path = "#{prefix}/lib/pkgconfig/groonga.pc"
+  pc_content = File.read(pc_path)
+  File.open(pc_path, "w") do |pc|
+    pc.puts(pc_content.gsub(/^prefix=.*$/, "prefix=#{real_prefix}"))
+  end
+
+end
+
 Dir.chdir(build_dir) do
   puts("-----> Installing Groonga #{version}")
 
@@ -34,22 +59,10 @@ Dir.chdir(build_dir) do
   sh("tar", "xf", base_name)
   rm(base_name)
 
-  groonga_dir = "vendor/groonga"
-  rm(Dir.glob("#{groonga_dir}/lib/**/*.a"))
-  rm_r("#{groonga_dir}/share/groonga/examples")
-  rm_r("#{groonga_dir}/share/groonga/images")
-  executable_dirs = ["bin", "sbin"]
-  executable_dirs.each do |executable_dir|
-    mkdir_p(executable_dir)
-    Dir.chdir(executable_dir) do
-      ln_s(Dir.glob("../vendor/groonga/#{executable_dir}/*"), ".")
-    end
-  end
-  pc_path = "#{groonga_dir}/lib/pkgconfig/groonga.pc"
-  pc_content = File.read(pc_path)
-  File.open(pc_path, "w") do |pc|
-    pc.puts(pc_content.gsub(/^prefix=\/app/, "prefix=#{build_dir}"))
-  end
+  prefix = "vendor/groonga"
+  remove_needless_files(prefix)
+  link_executales(prefix)
+  fix_prefix_in_pc(prefix, "#{build_dir}/#{prefix}")
 
   puts("-----> Creating Groonga database")
   ENV["PATH"] = [
