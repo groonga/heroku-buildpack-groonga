@@ -29,6 +29,9 @@ release["config_vars"] = {
   "LD_LIBRARY_PATH" => ld_library_paths.compact.join(File::PATH_SEPARATOR),
 }
 
+app_groonga_admin_html_dir =
+  File.join(app_groonga_dir, "share", "groonga", "html", "admin")
+
 app_groonga_httpd_conf_dir =
   File.join(app_groonga_dir, "etc", "groonga", "httpd")
 app_groonga_httpd_conf =
@@ -65,7 +68,7 @@ http {
     }
 
     location / {
-      root #{File.join(app_groonga_httpd_conf_dir, "admin")};
+      root #{app_groonga_admin_html_dir};
       index index.html;
     }
 
