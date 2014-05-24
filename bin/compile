@@ -38,6 +38,13 @@ Dir.chdir(build_dir) do
   rm(Dir.glob("#{groonga_dir}/lib/**/*.a"))
   rm_r("#{groonga_dir}/share/groonga/examples")
   rm_r("#{groonga_dir}/share/groonga/images")
+  Dir.chdir("bin") do
+    ln_s(Dir.glob("../vendor/groonga/bin/*"), ".")
+  end
+  mkdir_p("sbin")
+  Dir.chdir("sbin") do
+    ln_s(Dir.glob("../vendor/groonga/sbin/*"), ".")
+  end
 
   puts("-----> Creating Groonga database")
   ENV["PATH"] = [
