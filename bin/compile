@@ -60,17 +60,18 @@ Dir.chdir(build_dir) do
   rm(base_name)
 
   prefix = "vendor/groonga"
+  absolete_prefix = "#{build_dir}/#{prefix}"
   remove_needless_files(prefix)
   link_executales(prefix)
-  fix_prefix_in_pc(prefix, "#{build_dir}/#{prefix}")
+  fix_prefix_in_pc(prefix, absolete_prefix)
 
   puts("-----> Creating Groonga database")
   ENV["PATH"] = [
-    "#{build_dir}/#{groonga_dir}/bin",
+    "#{absolete_prefix}/bin",
     ENV["PATH"],
   ].join(File::PATH_SEPARATOR)
   ENV["LD_LIBRARY_PATH"] = [
-    "#{build_dir}/#{groonga_dir}/lib",
+    "#{absolete_prefix}/lib",
     ENV["LD_LIBRARY_PATH"],
   ].join(File::PATH_SEPARATOR)
   sh("groonga", "-n", database_path, "quit")
