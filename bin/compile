@@ -38,13 +38,12 @@ Dir.chdir(build_dir) do
   rm(Dir.glob("#{groonga_dir}/lib/**/*.a"))
   rm_r("#{groonga_dir}/share/groonga/examples")
   rm_r("#{groonga_dir}/share/groonga/images")
-  mkdir_p("bin")
-  Dir.chdir("bin") do
-    ln_s(Dir.glob("../vendor/groonga/bin/*"), ".")
-  end
-  mkdir_p("sbin")
-  Dir.chdir("sbin") do
-    ln_s(Dir.glob("../vendor/groonga/sbin/*"), ".")
+  executable_dirs = ["bin", "sbin"]
+  executable_dirs.each do |executable_dir|
+    mkdir_p(executable_dir)
+    Dir.chdir(executable_dir) do
+      ln_s(Dir.glob("../vendor/groonga/#{executable_dir}/*"), ".")
+    end
   end
 
   puts("-----> Creating Groonga database")
