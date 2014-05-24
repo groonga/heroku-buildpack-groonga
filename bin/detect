@@ -3,7 +3,7 @@
 build_dir = ARGV[0]
 
 if File.exist?(File.join(build_dir, "groonga"))
-  puts("groonga")
+  puts("Groonga")
   exit(true)
 else
   puts("no")
