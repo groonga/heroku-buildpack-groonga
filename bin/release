@@ -47,6 +47,8 @@ worker_processes 1;
 
 daemon off;
 
+error_log stderr error;
+
 events {
   worker_connections 1024;
 }
@@ -56,6 +58,8 @@ http {
   default_type application/octet-stream;
   sendfile on;
   keepalive_timeout 65;
+
+  access_log off;
 
   groonga_database #{database_path};
 
