@@ -51,10 +51,6 @@ Dir.chdir(build_dir) do
   sh("groonga", "-n", database_path, "quit")
 
   puts("-----> Loading data")
-  load_rb = "groonga/load.rb"
-  if File.executable?(load_rb)
-    ruby(load_rb, database_path)
-  end
   Dir.glob("groonga/*.grn").sort.each do |grn|
     sh("groonga", "--file", grn, database_path)
     rm(grn)
