@@ -21,8 +21,8 @@ ld_library_paths = [
   ENV["LD_LIBRARY_PATH"],
 ]
 release["config_vars"] = {
-  "PATH"            => paths.join(":"),
-  "LD_LIBRARY_PATH" => ld_library_paths.compact.join(":"),
+  "PATH"            => paths.join(File::PATH_SEPARATOR),
+  "LD_LIBRARY_PATH" => ld_library_paths.compact.join(File::PATH_SEPARATOR),
 }
 
 release["default_process_types"] = {
