@@ -24,9 +24,14 @@ ld_library_paths = [
   File.join(app_groonga_dir, "lib"),
   ENV["LD_LIBRARY_PATH"],
 ]
+pkg_config_paths = [
+  File.join(app_groonga_dir, "lib", "pkgconfig"),
+  ENV["PKG_CONFIG_PATH"],
+]
 release["config_vars"] = {
   "PATH"            => paths.join(File::PATH_SEPARATOR),
   "LD_LIBRARY_PATH" => ld_library_paths.compact.join(File::PATH_SEPARATOR),
+  "PKG_CONFIG_PATH" => pkg_config_paths.compact.join(File::PATH_SEPARATOR),
   "GROONGA_DATABASE_PATH" => database_path,
 }
 
