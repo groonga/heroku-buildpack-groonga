@@ -45,6 +45,11 @@ Dir.chdir(build_dir) do
       ln_s(Dir.glob("../vendor/groonga/#{executable_dir}/*"), ".")
     end
   end
+  pc_path = "#{groonga_dir}/lib/pkgconfig/groonga.pc"
+  pc_content = File.read(pc_path)
+  File.open(pc_path, "w") do |pc|
+    pc.puts(pc_content.gsub(/^prefix=\/app/, "prefix=#{build_dir}"))
+  end
 
   puts("-----> Creating Groonga database")
   ENV["PATH"] = [
