@@ -4,20 +4,24 @@ require "yaml"
 
 build_dir = ARGV.first
 
-database_path = File.join(build_dir, "groonga", "database")
-groonga_dir = File.join(build_dir, "vendor", "groonga")
+app_dir = "/app"
+
+database_path = File.join(app_dir, "groonga", "database")
+
+build_groonga_dir = File.join(build_dir, "vendor", "groonga")
+app_groonga_dir = File.join(app_dir, "vendor", "groonga")
 
 release = {}
 
 release["addons"] = []
 
 paths = [
-  File.join(groonga_dir, "bin"),
-  File.join(groonga_dir, "sbin"),
+  File.join(app_groonga_dir, "bin"),
+  File.join(app_groonga_dir, "sbin"),
   ENV["PATH"],
 ]
 ld_library_paths = [
-  File.join(groonga_dir, "lib"),
+  File.join(app_groonga_dir, "lib"),
   ENV["LD_LIBRARY_PATH"],
 ]
 release["config_vars"] = {
@@ -29,8 +33,12 @@ release["default_process_types"] = {
   "web" => "groonga-httpd",
 }
 
-groonga_httpd_conf_dir = File.join(groonga_dir, "etc", "groonga", "httpd")
-groonga_httpd_conf = File.join(groonga_httpd_conf_dir, "groonga-httpd.conf")
+app_groonga_httpd_conf_dir =
+  File.join(app_groonga_dir, "etc", "groonga", "httpd")
+build_groonga_httpd_conf_dir =
+  File.join(build_groonga_dir, "etc", "groonga", "httpd")
+build_groonga_httpd_conf =
+  File.join(build_groonga_httpd_conf_dir, "groonga-httpd.conf")
 File.open(groonga_httpd_conf, "w") do |conf|
   conf.puts(<<-CONF)
 worker_processes 1;
@@ -58,7 +66,7 @@ http {
     }
 
     location / {
-      root #{File.join(groonga_httpd_conf_dir, "admin")};
+      root #{File.join(app_groonga_httpd_conf_dir, "admin")};
       index index.html;
     }
 
