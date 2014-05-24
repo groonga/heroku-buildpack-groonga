@@ -12,7 +12,7 @@ Create `groonga` directory on the root of your project and place `*.grn` files i
     mkdir -p groonga
     vi groonga/0-schema.grn
     vi groonga/1-data.grn
-    vi groonga/99-indexes.grn
+    vi groonga/9-indexes.grn
 
 Then push them to Heroku.
 
