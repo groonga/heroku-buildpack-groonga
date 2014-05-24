@@ -39,7 +39,7 @@ build_groonga_httpd_conf_dir =
   File.join(build_groonga_dir, "etc", "groonga", "httpd")
 build_groonga_httpd_conf =
   File.join(build_groonga_httpd_conf_dir, "groonga-httpd.conf")
-File.open(groonga_httpd_conf, "w") do |conf|
+File.open(build_groonga_httpd_conf, "w") do |conf|
   conf.puts(<<-CONF)
 worker_processes 1;
 
