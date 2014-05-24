@@ -27,6 +27,7 @@ ld_library_paths = [
 release["config_vars"] = {
   "PATH"            => paths.join(File::PATH_SEPARATOR),
   "LD_LIBRARY_PATH" => ld_library_paths.compact.join(File::PATH_SEPARATOR),
+  "GROONGA_DATABASE_PATH" => database_path,
 }
 
 app_groonga_admin_html_dir =
