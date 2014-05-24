@@ -4,9 +4,8 @@ require "yaml"
 
 build_dir = ARGV.first
 
-base_dir = Dir.pwd
-database_path = File.join(base_dir, "groonga", "database")
-groonga_dir = File.join(base_dir, "vendor", "groonga")
+database_path = File.join(build_dir, "groonga", "database")
+groonga_dir = File.join(build_dir, "vendor", "groonga")
 
 release = {}
 
