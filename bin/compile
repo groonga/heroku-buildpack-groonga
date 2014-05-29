@@ -8,7 +8,7 @@ include FileUtils
 
 build_dir, cache_dir, env_dir, = ARGV
 
-version = "4.0.1"
+version = "4.0.2"
 database_path = "groonga/database"
 
 def sh(*command_line)
