@@ -6,8 +6,8 @@ build_dir = ARGV.first
 
 app_dir = "/app"
 
-base_dir = File.join(app_dir, "groonga")
-database_path = File.join(base_dir, "database")
+base_path = File.join(app_dir, "groonga")
+database_path = File.join(base_path, "database")
 
 build_groonga_dir = File.join(build_dir, "vendor", "groonga")
 app_groonga_dir = File.join(app_dir, "vendor", "groonga")
@@ -33,7 +33,7 @@ release["config_vars"] = {
   "PATH"            => paths.join(File::PATH_SEPARATOR),
   "LD_LIBRARY_PATH" => ld_library_paths.compact.join(File::PATH_SEPARATOR),
   "PKG_CONFIG_PATH" => pkg_config_paths.compact.join(File::PATH_SEPARATOR),
-  "GROONGA_BASE_PATH"     => base_dir,
+  "GROONGA_BASE_PATH"     => base_path,
   "GROONGA_DATABASE_PATH" => database_path,
 }
 
