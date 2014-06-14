@@ -17,3 +17,13 @@ Create `groonga` directory on the root of your project and place `*.grn` files i
 Then push them to Heroku.
 
     git push heroku master
+
+## Environment variables
+
+You can use the following environment variables:
+
+  * `GROONGA_BASE_PATH`: The directory path to be placed Groogna
+    related files such as database. You can use the directory to put
+    Groonga related files.
+  * `GROONGA_DATABASE_PATH`: The Groonga database path for your
+    application. The path exists under `GROONGA_BASE_PATH` directory.
