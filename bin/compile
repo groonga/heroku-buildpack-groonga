@@ -32,6 +32,8 @@ def link_executales(prefix)
   executable_dirs.each do |executable_dir|
     mkdir_p(executable_dir)
     Dir.chdir(executable_dir) do
+      puts(Dir.pwd)
+      sh("ls -laR")
       ln_s(Dir.glob("../#{prefix}/#{executable_dir}/*"), ".")
     end
   end
