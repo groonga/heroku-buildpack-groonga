@@ -82,6 +82,7 @@ Dir.chdir(build_dir) do
     rm(grn)
   end
 
+  puts("-----> Setting environment variables")
   open("#{env_dir}/LD_LIBRARY_PATH", "w"){|f| f.write("#{absolete_prefix}/lib:$LD_LIBRARY_PATH")}
   open("#{env_dir}/PKG_CONFIG_PATH", "w"){|f| f.write("#{absolete_prefix}/lib/pkgconfig:$PKG_CONFIG_PATH")}
 
