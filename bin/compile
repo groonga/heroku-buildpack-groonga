@@ -100,7 +100,7 @@ Dir.chdir(build_dir) do
 
   app_dir = ENV["HOME"] 
   profile_dir="#{build_dir}/.profile.d"
-  FileUtils.mkdir_p(profile_dir) unless FileTest.exist?(profile_dir)  
+  FileUtils.mkdir_p(profile_dir)
   open("#{profile_dir}/groonga.sh", "w") do |env_file|
     env_file.write("export LD_LIBRARY_PATH=#{app_dir}/#{prefix}/lib:$LD_LIBRARY_PATH")
   end
