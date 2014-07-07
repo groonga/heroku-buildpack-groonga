@@ -66,14 +66,17 @@ Dir.chdir(build_dir) do
   fix_prefix_in_pc(prefix, absolete_prefix)
 
   puts("-----> Creating Groonga database")
-  ENV["PATH"] = [
+  paths = [
     "#{absolete_prefix}/bin",
     ENV["PATH"],
-  ].join(File::PATH_SEPARATOR)
-  ENV["LD_LIBRARY_PATH"] = [
-    "#{absolete_prefix}/lib",
+  ]
+  ENV["PATH"] = paths.compact.join(File::PATH_SEPARATOR)
+  lib_dir = "#{absolete_prefix}/lib"
+  ld_library_paths = [
+    lib_dir,
     ENV["LD_LIBRARY_PATH"],
-  ].join(File::PATH_SEPARATOR)
+  ]
+  ENV["LD_LIBRARY_PATH"] = ld_library_paths.compact.join(File::PATH_SEPARATOR)
   sh("groonga", "-n", database_path, "quit")
 
   puts("-----> Loading data")
@@ -84,10 +87,15 @@ Dir.chdir(build_dir) do
 
   puts("-----> Setting environment variables")
   open("#{env_dir}/LD_LIBRARY_PATH", "w") do |env_file|
-    env_file.write("#{absolete_prefix}/lib:$LD_LIBRARY_PATH")
+    env_file.write(ENV["LD_LIBRARY_PATH"])
   end
   open("#{env_dir}/PKG_CONFIG_PATH", "w") do |env_file|
-    env_file.write("#{absolete_prefix}/lib/pkgconfig:$PKG_CONFIG_PATH")
+    pkg_config_paths = [
+      "#{lib_dir}/pkgconfig",
+      ENV["PKG_CONFIG_PATH"]
+    ]
+    pkg_config_path = pkg_config_paths.compact.join(File::PATH_SEPARATOR)
+    env_file.write(pkg_config_path)
   end
 
   app_dir = ENV["HOME"] 
