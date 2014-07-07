@@ -21,6 +21,18 @@ def ruby(*command_line)
   sh(*command_line)
 end
 
+def load_environment_variables(env_dir)
+  return {} if env_dir.nil?
+
+  variables = {}
+  Dir.chdir(env_dir) do
+    Dir.glob("*") do |key|
+      variables[key] = File.read(key)
+    end
+  end
+  variables
+end
+
 def remove_needless_files(prefix)
   rm(Dir.glob("#{prefix}/lib/**/*.a"))
   rm_r("#{prefix}/share/groonga/examples")
@@ -45,6 +57,9 @@ def fix_prefix_in_pc(prefix, real_prefix)
   end
 end
 
+puts("-----> Loading environment variables")
+environment_variables = load_environment_variables(env_dir)
+
 Dir.chdir(build_dir) do
   puts("-----> Installing Groonga #{version}")
 
@@ -67,12 +82,14 @@ Dir.chdir(build_dir) do
   puts("-----> Creating Groonga database")
   paths = [
     "#{absolete_prefix}/bin",
+    environment_variables["PATH"],
     ENV["PATH"],
   ]
   ENV["PATH"] = paths.compact.join(File::PATH_SEPARATOR)
   lib_dir = "#{absolete_prefix}/lib"
   ld_library_paths = [
     lib_dir,
+    environment_variables["LD_LIBRARY_PATH"],
     ENV["LD_LIBRARY_PATH"],
   ]
   ENV["LD_LIBRARY_PATH"] = ld_library_paths.compact.join(File::PATH_SEPARATOR)
@@ -91,6 +108,7 @@ Dir.chdir(build_dir) do
   open("#{env_dir}/PKG_CONFIG_PATH", "w") do |env_file|
     pkg_config_paths = [
       "#{lib_dir}/pkgconfig",
+      environment_variables["PKG_CONFIG_PATH"],
       ENV["PKG_CONFIG_PATH"]
     ]
     pkg_config_path = pkg_config_paths.compact.join(File::PATH_SEPARATOR)
@@ -103,6 +121,7 @@ Dir.chdir(build_dir) do
   open("#{profile_dir}/groonga.sh", "w") do |env_file|
     ld_library_paths = [
       "#{app_dir}/#{prefix}/lib",
+      environment_variables["LD_LIBRARY_PATH"],
       ENV["LD_LIBRARY_PATH"]
     ]
     ld_library_path = ld_library_paths.compact.join(File::PATH_SEPARATOR)
