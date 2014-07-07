@@ -43,7 +43,6 @@ def fix_prefix_in_pc(prefix, real_prefix)
   File.open(pc_path, "w") do |pc|
     pc.puts(pc_content.gsub(/^prefix=.*$/, "prefix=#{real_prefix}"))
   end
-
 end
 
 Dir.chdir(build_dir) do
