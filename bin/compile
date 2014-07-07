@@ -124,6 +124,6 @@ Dir.chdir(build_dir) do
   open("#{profile_dir}/groonga.sh", "w") do |env_file|
     ld_library_paths = ["#{app_dir}/#{prefix}/lib"] + base_ld_library_paths
     ld_library_path = build_path_environment_value(ld_library_paths)
-    env_file.write("export LD_LIBRARY_PATH=#{ld_library_path}")
+    env_file.puts("export LD_LIBRARY_PATH=#{ld_library_path}")
   end
 end
