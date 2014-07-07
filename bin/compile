@@ -107,7 +107,7 @@ Dir.chdir(build_dir) do
 
   puts("-----> Setting environment variables")
   open("#{env_dir}/LD_LIBRARY_PATH", "w") do |env_file|
-    env_file.write(ENV["LD_LIBRARY_PATH"])
+    env_file.print(ENV["LD_LIBRARY_PATH"])
   end
   open("#{env_dir}/PKG_CONFIG_PATH", "w") do |env_file|
     pkg_config_paths = [
@@ -115,7 +115,7 @@ Dir.chdir(build_dir) do
       environment_variables["PKG_CONFIG_PATH"],
       ENV["PKG_CONFIG_PATH"]
     ]
-    env_file.write(build_path_environment_value(pkg_config_paths))
+    env_file.print(build_path_environment_value(pkg_config_paths))
   end
 
   app_dir = ENV["HOME"]
