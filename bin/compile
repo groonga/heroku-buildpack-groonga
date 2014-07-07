@@ -101,6 +101,11 @@ Dir.chdir(build_dir) do
   profile_dir="#{build_dir}/.profile.d"
   FileUtils.mkdir_p(profile_dir)
   open("#{profile_dir}/groonga.sh", "w") do |env_file|
-    env_file.write("export LD_LIBRARY_PATH=#{app_dir}/#{prefix}/lib:$LD_LIBRARY_PATH")
+    ld_library_paths = [
+      "#{app_dir}/#{prefix}/lib",
+      ENV["LD_LIBRARY_PATH"]
+    ]
+    ld_library_path = ld_library_paths.compact.join(File::PATH_SEPARATOR)
+    env_file.write("export LD_LIBRARY_PATH=#{ld_library_path}")
   end
 end
