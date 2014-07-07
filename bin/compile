@@ -81,4 +81,12 @@ Dir.chdir(build_dir) do
     sh("groonga", "--file", grn, database_path)
     rm(grn)
   end
+
+  open("#{env_dir}/LD_LIBRARY_PATH", "w"){|f| f.write("#{absolete_prefix}/lib:$LD_LIBRARY_PATH")}
+  open("#{env_dir}/PKG_CONFIG_PATH", "w"){|f| f.write("#{absolete_prefix}/lib/pkgconfig:$PKG_CONFIG_PATH")}
+
+  app_dir = ENV["HOME"] 
+  profile_dir="#{build_dir}/.profile.d"
+  FileUtils.mkdir_p(profile_dir) unless FileTest.exist?(profile_dir)  
+  open("#{profile_dir}/groonga.sh", "w"){|f| f.write("export LD_LIBRARY_PATH=#{app_dir}/#{prefix}/lib:$LD_LIBRARY_PATH")}
 end
