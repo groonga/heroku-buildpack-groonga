@@ -34,7 +34,7 @@ def load_environment_variables(env_dir)
 end
 
 def build_path_environment_value(paths)
-  paths.compact.join(File::PATH_SEPARATOR)
+  paths.compact.uniq.join(File::PATH_SEPARATOR)
 end
 
 def remove_needless_files(prefix)
