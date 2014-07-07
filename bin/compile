@@ -97,7 +97,7 @@ Dir.chdir(build_dir) do
     env_file.write(pkg_config_path)
   end
 
-  app_dir = ENV["HOME"] 
+  app_dir = ENV["HOME"]
   profile_dir="#{build_dir}/.profile.d"
   FileUtils.mkdir_p(profile_dir)
   open("#{profile_dir}/groonga.sh", "w") do |env_file|
