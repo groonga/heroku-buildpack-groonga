@@ -33,6 +33,10 @@ def load_environment_variables(env_dir)
   variables
 end
 
+def build_path_environment_value(paths)
+  paths.compact.join(File::PATH_SEPARATOR)
+end
+
 def remove_needless_files(prefix)
   rm(Dir.glob("#{prefix}/lib/**/*.a"))
   rm_r("#{prefix}/share/groonga/examples")
@@ -85,14 +89,14 @@ Dir.chdir(build_dir) do
     environment_variables["PATH"],
     ENV["PATH"],
   ]
-  ENV["PATH"] = paths.compact.join(File::PATH_SEPARATOR)
+  ENV["PATH"] = build_path_environment_value(paths)
   lib_dir = "#{absolete_prefix}/lib"
-  ld_library_paths = [
-    lib_dir,
+  base_ld_library_paths = [
     environment_variables["LD_LIBRARY_PATH"],
     ENV["LD_LIBRARY_PATH"],
   ]
-  ENV["LD_LIBRARY_PATH"] = ld_library_paths.compact.join(File::PATH_SEPARATOR)
+  ld_library_paths = [lib_dir] + base_ld_library_paths
+  ENV["LD_LIBRARY_PATH"] = build_path_environment_value(ld_library_paths)
   sh("groonga", "-n", database_path, "quit")
 
   puts("-----> Loading data")
@@ -111,20 +115,15 @@ Dir.chdir(build_dir) do
       environment_variables["PKG_CONFIG_PATH"],
       ENV["PKG_CONFIG_PATH"]
     ]
-    pkg_config_path = pkg_config_paths.compact.join(File::PATH_SEPARATOR)
-    env_file.write(pkg_config_path)
+    env_file.write(build_path_environment_value(pkg_config_paths))
   end
 
   app_dir = ENV["HOME"]
   profile_dir="#{build_dir}/.profile.d"
   FileUtils.mkdir_p(profile_dir)
   open("#{profile_dir}/groonga.sh", "w") do |env_file|
-    ld_library_paths = [
-      "#{app_dir}/#{prefix}/lib",
-      environment_variables["LD_LIBRARY_PATH"],
-      ENV["LD_LIBRARY_PATH"]
-    ]
-    ld_library_path = ld_library_paths.compact.join(File::PATH_SEPARATOR)
+    ld_library_paths = ["#{app_dir}/#{prefix}/lib"] + base_ld_library_paths
+    ld_library_path = build_path_environment_value(ld_library_paths)
     env_file.write("export LD_LIBRARY_PATH=#{ld_library_path}")
   end
 end
