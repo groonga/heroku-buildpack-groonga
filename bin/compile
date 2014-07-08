@@ -106,10 +106,10 @@ Dir.chdir(build_dir) do
   end
 
   puts("-----> Setting environment variables")
-  open("#{env_dir}/LD_LIBRARY_PATH", "w") do |env_file|
+  File.open("#{env_dir}/LD_LIBRARY_PATH", "w") do |env_file|
     env_file.print(ENV["LD_LIBRARY_PATH"])
   end
-  open("#{env_dir}/PKG_CONFIG_PATH", "w") do |env_file|
+  File.open("#{env_dir}/PKG_CONFIG_PATH", "w") do |env_file|
     pkg_config_paths = [
       "#{lib_dir}/pkgconfig",
       environment_variables["PKG_CONFIG_PATH"],
@@ -121,7 +121,7 @@ Dir.chdir(build_dir) do
   app_dir = ENV["HOME"]
   profile_dir="#{build_dir}/.profile.d"
   FileUtils.mkdir_p(profile_dir)
-  open("#{profile_dir}/groonga.sh", "w") do |env_file|
+  File.open("#{profile_dir}/groonga.sh", "w") do |env_file|
     ld_library_paths = ["#{app_dir}/#{prefix}/lib"] + base_ld_library_paths
     ld_library_path = build_path_environment_value(ld_library_paths)
     env_file.puts("export LD_LIBRARY_PATH=#{ld_library_path}")
