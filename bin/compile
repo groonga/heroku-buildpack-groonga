@@ -11,6 +11,12 @@ build_dir, cache_dir, env_dir, = ARGV
 version = "4.0.4"
 database_path = "groonga/database"
 
+def detect_latest_version
+  client = Octokit::Client.new
+  tags = client.tags(github_groonga_repository)
+  tags[0].name.delete("v")
+end
+
 def sh(*command_line)
   puts(command_line.join(" "))
   system(*command_line) or exit(false)
