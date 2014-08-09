@@ -3,6 +3,8 @@
 
 require "rbconfig"
 require "fileutils"
+require "json"
+require "open-uri"
 
 include FileUtils
 
