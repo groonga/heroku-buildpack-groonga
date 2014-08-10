@@ -19,11 +19,11 @@ def detect_latest_version
   end
   begin
     releases[0]["assets"][0]["name"]
-    latest_version = releases[0]["tag_name"]
+    latest_tag_name = releases[0]["tag_name"]
   rescue
-    latest_version = releases[1]["tag_name"]
+    latest_tag_name = releases[1]["tag_name"]
   end
-  latest_version.sub(/\Av/, "")
+  latest_tag_name.sub(/\Av/, "")
 end
 
 def sh(*command_line)
