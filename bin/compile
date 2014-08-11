@@ -17,13 +17,13 @@ def detect_latest_version
   releases = open(uri) do |json|
     JSON.load(json)
   end
-  begin
-    releases[0]["assets"][0]["name"]
-    latest_tag_name = releases[0]["tag_name"]
-  rescue
-    latest_tag_name = releases[1]["tag_name"]
+  latest_heroku_avaliable_release = releases.find do |release|
+    assets = release["assets"] || []
+    assets.any? do |asset|
+      asset["name"].start_with?("heroku-groonga-")
+    end
   end
-  latest_tag_name.sub(/\Av/, "")
+  latest_heroku_avaliable_release["tag_name"].sub(/\Av/, "")
 end
 
 def sh(*command_line)
