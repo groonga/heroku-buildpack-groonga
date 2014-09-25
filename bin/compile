@@ -76,6 +76,12 @@ def fix_prefix_in_pc(prefix, real_prefix)
   end
 end
 
+def mecab_enable
+  if ENV[GROONGA_MECAB_ENABLE] == "yes"
+    File.join("vendor", "mecab", "lib")
+  end
+end
+
 puts("-----> Loading environment variables")
 environment_variables = load_environment_variables(env_dir)
 
@@ -111,6 +117,7 @@ Dir.chdir(build_dir) do
   base_ld_library_paths = [
     environment_variables["LD_LIBRARY_PATH"],
     ENV["LD_LIBRARY_PATH"],
+    mecab_enable,
   ]
   ld_library_paths = [lib_dir] + base_ld_library_paths
   ENV["LD_LIBRARY_PATH"] = build_path_environment_value(ld_library_paths)
