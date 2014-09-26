@@ -77,7 +77,7 @@ def fix_prefix_in_pc(prefix, real_prefix)
 end
 
 def mecab_enable
-  if ENV[GROONGA_MECAB_ENABLE] == "yes"
+  if ENV["GROONGA_MECAB_ENABLE"] == "yes"
     File.join("vendor", "mecab", "lib")
   end
 end
