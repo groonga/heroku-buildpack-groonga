@@ -10,7 +10,7 @@ include FileUtils
 
 build_dir, cache_dir, env_dir, = ARGV
 
-database_path = "groonga/database"
+database_path = "groonga/data/db"
 
 def detect_latest_version
   uri = "https://api.github.com/repos/groonga/groonga/releases"
@@ -121,6 +121,7 @@ Dir.chdir(build_dir) do
   ]
   ld_library_paths = [lib_dir] + base_ld_library_paths
   ENV["LD_LIBRARY_PATH"] = build_path_environment_value(ld_library_paths)
+  mkdir_p(File.dirname(database_path))
   sh("groonga", "-n", database_path, "quit")
 
   puts("-----> Loading data")
