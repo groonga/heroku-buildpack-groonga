@@ -76,6 +76,15 @@ def fix_prefix_in_pc(prefix, real_prefix)
   end
 end
 
+def update_mecabrc(mecabrc, prefix)
+  sh("sed", "-i.bak", "-e", "s,/app,#{prefix},g", mecabrc)
+  begin
+    yield
+  ensure
+    mv("#{mecabrc}.bak", mecabrc)
+  end
+end
+
 puts("-----> Loading environment variables")
 environment_variables = load_environment_variables(env_dir)
 
@@ -117,18 +126,17 @@ Dir.chdir(build_dir) do
   ENV["LD_LIBRARY_PATH"] = build_path_environment_value(ld_library_paths)
   ENV["GRN_PLUGINS_DIR"] = "#{absolete_prefix}/lib/groonga/plugins"
   ENV["GRN_RUBY_SCRIPTS_DIR"] = "#{absolete_prefix}/lib/groonga/scripts/ruby"
-  mecabrc = "#{build_dir}/vendor/mecab/etc/mecabrc"
-  ENV["MECABRC"] = mecabrc
-  sh("sed", "-i.bak", "-e", "s,/app,#{build_dir},g", ENV["MECABRC"])
-  mkdir_p(File.dirname(database_path))
-  sh("groonga", "--log-path", "/tmp/log", "--log-level", "debug", "-n", database_path, "quit")
-  puts(File.read("/tmp/log"))
-  mv("#{mecabrc}.bak", mecabrc)
+  ENV["MECABRC"] = "#{build_dir}/vendor/mecab/etc/mecabrc"
+  update_mecabrc(ENV["MECABRC"], build_dir) do
+    mkdir_p(File.dirname(database_path))
+    sh("groonga", "--log-path", "/tmp/log", "--log-level", "debug", "-n", database_path, "quit")
+    puts(File.read("/tmp/log"))
 
-  puts("-----> Loading data")
-  Dir.glob("groonga/*.grn").sort.each do |grn|
-    sh("groonga", "--file", grn, database_path)
-    rm(grn)
+    puts("-----> Loading data")
+    Dir.glob("groonga/*.grn").sort.each do |grn|
+      sh("groonga", "--file", grn, database_path)
+      rm(grn)
+    end
   end
 
   puts("-----> Setting environment variables")
