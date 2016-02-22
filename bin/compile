@@ -129,8 +129,7 @@ Dir.chdir(build_dir) do
   ENV["MECABRC"] = "#{build_dir}/vendor/mecab/etc/mecabrc"
   update_mecabrc(ENV["MECABRC"], build_dir) do
     mkdir_p(File.dirname(database_path))
-    sh("groonga", "--log-path", "/tmp/log", "--log-level", "debug", "-n", database_path, "quit")
-    puts(File.read("/tmp/log"))
+    sh("groonga", "-n", database_path, "quit")
 
     puts("-----> Loading data")
     Dir.glob("groonga/*.grn").sort.each do |grn|
