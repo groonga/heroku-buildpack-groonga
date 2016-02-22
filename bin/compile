@@ -120,9 +120,12 @@ Dir.chdir(build_dir) do
   base_ld_library_paths = [
     environment_variables["LD_LIBRARY_PATH"],
     ENV["LD_LIBRARY_PATH"],
+  ]
+  ld_library_paths = [
+    lib_dir,
     "#{build_dir}/vendor/mecab/lib",
   ]
-  ld_library_paths = [lib_dir] + base_ld_library_paths
+  ld_library_paths += base_ld_library_paths
   ENV["LD_LIBRARY_PATH"] = build_path_environment_value(ld_library_paths)
   ENV["GRN_PLUGINS_DIR"] = "#{absolete_prefix}/lib/groonga/plugins"
   ENV["GRN_RUBY_SCRIPTS_DIR"] = "#{absolete_prefix}/lib/groonga/scripts/ruby"
@@ -155,7 +158,11 @@ Dir.chdir(build_dir) do
   profile_dir="#{build_dir}/.profile.d"
   FileUtils.mkdir_p(profile_dir)
   File.open("#{profile_dir}/groonga.sh", "w") do |env_file|
-    ld_library_paths = ["#{app_dir}/#{prefix}/lib"] + base_ld_library_paths
+    ld_library_paths = [
+      "#{app_dir}/#{prefix}/lib",
+      "#{app_dir}/vendor/mecab/lib",
+    ]
+    ld_library_paths += base_ld_library_paths
     ld_library_path = build_path_environment_value(ld_library_paths)
     env_file.puts("export LD_LIBRARY_PATH=#{ld_library_path}")
   end
