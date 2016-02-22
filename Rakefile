@@ -2,5 +2,5 @@
 
 desc "Publish this buildpack."
 task :publish do
-  sh("heroku", "buildpacks:publish", "groonga/groonga")
+  sh("heroku", "buildkits:publish", "groonga/groonga")
 end
