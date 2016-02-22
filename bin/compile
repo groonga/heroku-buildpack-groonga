@@ -118,6 +118,7 @@ Dir.chdir(build_dir) do
   ENV["GRN_PLUGINS_DIR"] = "#{absolete_prefix}/lib/groonga/plugins"
   ENV["GRN_RUBY_SCRIPTS_DIR"] = "#{absolete_prefix}/lib/groonga/scripts/ruby"
   ENV["MECABRC"] = "#{build_dir}/vendor/mecab/etc/mecabrc"
+  sh("ls", ENV["MECABRC"])
   mkdir_p(File.dirname(database_path))
   sh("groonga", "--log-path", "/tmp/log", "--log-level", "debug", "-n", database_path, "quit")
   puts(File.read("/tmp/log"))
