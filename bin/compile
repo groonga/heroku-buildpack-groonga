@@ -123,9 +123,9 @@ Dir.chdir(build_dir) do
   ENV["LD_LIBRARY_PATH"] = build_path_environment_value(ld_library_paths)
   ENV["GRN_PLUGINS_DIR"] = "#{absolete_prefix}/lib/groonga/plugins"
   ENV["GRN_RUBY_SCRIPTS_DIR"] = "#{absolete_prefix}/lib/groonga/scripts/ruby"
-  sh("ls", "-laR", ENV["GRN_PLUGINS_DIR"])
   mkdir_p(File.dirname(database_path))
-  sh("groonga", "-n", database_path, "quit")
+  sh("groonga", "--log-path", "/tmp/log", "--log-level", "debug", "-n", database_path, "quit")
+  puts(File.read("/tmp/log"))
 
   puts("-----> Loading data")
   Dir.glob("groonga/*.grn").sort.each do |grn|
