@@ -173,11 +173,11 @@ export LD_LIBRARY_PATH="#{app_ld_library_path}:$LD_LIBRARY_PATH"
       "#{absolete_prefix}/lib/pkgconfig",
     ]
     export.puts(<<-EXPORT)
-LD_LIBRARY_PATH="#{ld_library_paths.join(File::PATH_SEPARATOR)}:$LD_LIBRARY_PATH"
-PKG_CONFIG_PATH="#{pkg_config_paths.join(File::PATH_SEPARATOR)}:$PKG_CONFIG_PATH"
-GRN_PLUGINS_DIR="#{ENV["GRN_PLUGINS_DIR"]}"
-GRN_RUBY_SCRIPTS_DIR="#{ENV["GRN_RUBY_SCRIPTS_DIR"]}"
-MECABRC="#{ENV["MECABRC"]}"
+export LD_LIBRARY_PATH="#{ld_library_paths.join(File::PATH_SEPARATOR)}:$LD_LIBRARY_PATH"
+export PKG_CONFIG_PATH="#{pkg_config_paths.join(File::PATH_SEPARATOR)}:$PKG_CONFIG_PATH"
+export GRN_PLUGINS_DIR="#{ENV["GRN_PLUGINS_DIR"]}"
+export GRN_RUBY_SCRIPTS_DIR="#{ENV["GRN_RUBY_SCRIPTS_DIR"]}"
+export MECABRC="#{ENV["MECABRC"]}"
     EXPORT
   end
   p export_path
