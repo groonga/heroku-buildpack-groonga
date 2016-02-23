@@ -169,17 +169,21 @@ export LD_LIBRARY_PATH="#{app_ld_library_path}:$LD_LIBRARY_PATH"
 
   export_path = File.join(File.dirname(__FILE__), "..", "export")
   File.open(export_path, "a") do |export|
+    paths = [
+      "#{absolete_prefix}/sbin",
+      "#{absolete_prefix}/bin",
+    ]
     pkg_config_paths = [
       "#{absolete_prefix}/lib/pkgconfig",
     ]
     export.puts(<<-EXPORT)
+export PATH="#{paths.join(File::PATH_SEPARATOR)}:$PATH"
 export LD_LIBRARY_PATH="#{ld_library_paths.join(File::PATH_SEPARATOR)}:$LD_LIBRARY_PATH"
 export PKG_CONFIG_PATH="#{pkg_config_paths.join(File::PATH_SEPARATOR)}:$PKG_CONFIG_PATH"
 export GRN_PLUGINS_DIR="#{ENV["GRN_PLUGINS_DIR"]}"
 export GRN_RUBY_SCRIPTS_DIR="#{ENV["GRN_RUBY_SCRIPTS_DIR"]}"
 export MECABRC="#{ENV["MECABRC"]}"
+export GROONGA_DATABASE_PATH="#{absolete_prefix}/#{database_path}"
     EXPORT
   end
-  p export_path
-  puts(File.read(export_path))
 end
