@@ -180,4 +180,6 @@ GRN_RUBY_SCRIPTS_DIR="#{ENV["GRN_RUBY_SCRIPTS_DIR"]}"
 MECABRC="#{ENV["MECABRC"]}"
     EXPORT
   end
+  p export_path
+  puts(File.read(export_path))
 end
