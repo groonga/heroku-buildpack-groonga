@@ -123,7 +123,10 @@ Dir.chdir(build_dir) do
   mecabrc = "#{build_dir}/vendor/mecab/etc/mecabrc"
   mecabrc_suffix = ".compiling"
   ENV["MECABRC"] = "#{mecabrc}#{mecabrc_suffix}"
+  puts(File.read(ENV["MECABRC"]))
   sh("sed", "-i#{mecabrc_suffix}", "-e", "s,/app,#{build_dir},g", mecabrc)
+  puts("=" * 40)
+  puts(File.read(ENV["MECABRC"]))
   mkdir_p(File.dirname(database_path))
   sh("groonga", "--log-path", "/tmp/log", "--log-level", "debug", "-n", database_path, "quit")
   puts(File.read("/tmp/log"))
