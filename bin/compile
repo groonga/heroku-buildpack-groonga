@@ -183,7 +183,7 @@ export PKG_CONFIG_PATH="#{pkg_config_paths.join(File::PATH_SEPARATOR)}:$PKG_CONF
 export GRN_PLUGINS_DIR="#{ENV["GRN_PLUGINS_DIR"]}"
 export GRN_RUBY_SCRIPTS_DIR="#{ENV["GRN_RUBY_SCRIPTS_DIR"]}"
 export MECABRC="#{ENV["MECABRC"]}"
-export GROONGA_DATABASE_PATH="#{absolete_prefix}/#{database_path}"
+export GROONGA_DATABASE_PATH="#{build_dir}/#{database_path}"
     EXPORT
   end
 end
