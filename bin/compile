@@ -123,7 +123,7 @@ Dir.chdir(build_dir) do
   mecabrc = "#{build_dir}/vendor/mecab/etc/mecabrc"
   mecabrc_suffix = ".compiling"
   ENV["MECABRC"] = "#{mecabrc}#{mecabrc_suffix}"
-  puts(File.read(ENV["MECABRC"]))
+  puts(File.read(mecabrc))
   sh("sed", "-i#{mecabrc_suffix}", "-e", "s,/app,#{build_dir},g", mecabrc)
   puts("=" * 40)
   puts(File.read(ENV["MECABRC"]))
