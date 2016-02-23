@@ -125,8 +125,8 @@ Dir.chdir(build_dir) do
     lib_dir,
     "#{build_dir}/vendor/mecab/lib",
   ]
-  ld_library_paths += base_ld_library_paths
-  ENV["LD_LIBRARY_PATH"] = build_path_environment_value(ld_library_paths)
+  ENV["LD_LIBRARY_PATH"] =
+    build_path_environment_value(ld_library_paths + base_ld_library_paths)
   ENV["GRN_PLUGINS_DIR"] = "#{absolete_prefix}/lib/groonga/plugins"
   ENV["GRN_RUBY_SCRIPTS_DIR"] = "#{absolete_prefix}/lib/groonga/scripts/ruby"
   ENV["MECABRC"] = "#{build_dir}/vendor/mecab/etc/mecabrc"
@@ -158,12 +158,26 @@ Dir.chdir(build_dir) do
   profile_dir="#{build_dir}/.profile.d"
   FileUtils.mkdir_p(profile_dir)
   File.open("#{profile_dir}/groonga.sh", "w") do |env_file|
-    ld_library_paths = [
+    app_ld_library_path = [
       "#{app_dir}/#{prefix}/lib",
       "#{app_dir}/vendor/mecab/lib",
+    ].join(File::PATH_SEPARATOR)
+    env_file.puts(<<-GROONGA_SH)
+export LD_LIBRARY_PATH="#{app_ld_library_path}:$LD_LIBRARY_PATH"
+    GROONGA_SH
+  end
+
+  export_path = File.join(File.dirname(__FILE__), "..", "export")
+  File.open(export_path, "a") do |export|
+    pkg_config_paths = [
+      "#{absolete_prefix}/lib/pkgconfig",
     ]
-    ld_library_paths += base_ld_library_paths
-    ld_library_path = build_path_environment_value(ld_library_paths)
-    env_file.puts("export LD_LIBRARY_PATH=#{ld_library_path}")
+    export.puts(<<-EXPORT)
+LD_LIBRARY_PATH="#{ld_library_paths.join(File::PATH_SEPARATOR)}:$LD_LIBRARY_PATH"
+PKG_CONFIG_PATH="#{pkg_config_paths.join(File::PATH_SEPARATOR)}:$PKG_CONFIG_PATH"
+GRN_PLUGINS_DIR="#{ENV["GRN_PLUGINS_DIR"]}"
+GRN_RUBY_SCRIPTS_DIR="#{ENV["GRN_RUBY_SCRIPTS_DIR"]}"
+MECABRC="#{ENV["MECABRC"]}"
+    EXPORT
   end
 end
