@@ -154,7 +154,7 @@ Dir.chdir(build_dir) do
     env_file.print(build_path_environment_value(pkg_config_paths))
   end
 
-  app_dir = ENV["HOME"]
+  app_dir = "$HOME"
   profile_dir="#{build_dir}/.profile.d"
   FileUtils.mkdir_p(profile_dir)
   File.open("#{profile_dir}/groonga.sh", "w") do |env_file|
@@ -164,6 +164,7 @@ Dir.chdir(build_dir) do
     ].join(File::PATH_SEPARATOR)
     env_file.puts(<<-GROONGA_SH)
 export LD_LIBRARY_PATH="#{app_ld_library_path}:$LD_LIBRARY_PATH"
+export GROONGA_DATABASE_PATH="#{app_dir}/#{database_path}"
     GROONGA_SH
   end
 
