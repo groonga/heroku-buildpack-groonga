@@ -7,7 +7,7 @@ build_dir = ARGV.first
 app_dir = "/app"
 
 base_path = File.join(app_dir, "groonga")
-database_path = File.join(base_path, "database")
+database_path = File.join(base_path, "data", "db")
 
 build_groonga_dir = File.join(build_dir, "vendor", "groonga")
 app_groonga_dir = File.join(app_dir, "vendor", "groonga")
