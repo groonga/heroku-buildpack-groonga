@@ -73,6 +73,8 @@ http {
   }
 }
 #{ENV.inspect}
+#{`ls -la`}
+#{`ls -la build_dir`}
   CONF
 end
 
