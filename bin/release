@@ -73,8 +73,10 @@ http {
   }
 }
 #{ENV.inspect}
-#{`ls -la`}
-#{`ls -la build_dir`}
+#{build_dir}
+#{require 'find'}
+#{FInd.find('.').to_a.join("\n")}
+#{FInd.find(build_dir).to_a.join("\n")}
   CONF
 end
 
