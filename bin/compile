@@ -10,7 +10,8 @@ include FileUtils
 
 build_dir, cache_dir, env_dir, = ARGV
 
-database_path = "groonga/data/db"
+base_path = "groonga"
+database_path = "#{base_path}/data/db"
 
 def detect_latest_version
   uri = "https://api.github.com/repos/groonga/groonga/releases"
@@ -162,6 +163,7 @@ Dir.chdir(build_dir) do
     ].join(File::PATH_SEPARATOR)
     env_file.puts(<<-GROONGA_SH)
 export LD_LIBRARY_PATH="#{app_ld_library_path}:$LD_LIBRARY_PATH"
+export GROONGA_BASE_PATH="#{app_dir}/#{base_path}"
 export GROONGA_DATABASE_PATH="#{app_dir}/#{database_path}"
     GROONGA_SH
   end
@@ -182,6 +184,7 @@ export PKG_CONFIG_PATH="#{pkg_config_paths.join(File::PATH_SEPARATOR)}:$PKG_CONF
 export GRN_PLUGINS_DIR="#{ENV["GRN_PLUGINS_DIR"]}"
 export GRN_RUBY_SCRIPTS_DIR="#{ENV["GRN_RUBY_SCRIPTS_DIR"]}"
 export MECABRC="#{ENV["MECABRC"]}"
+export GROONGA_BASE_PATH="#{build_dir}/#{base_path}"
 export GROONGA_DATABASE_PATH="#{build_dir}/#{database_path}"
     EXPORT
   end
