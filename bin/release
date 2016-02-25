@@ -75,8 +75,8 @@ http {
 #{ENV.inspect}
 #{build_dir}
 #{require 'find'}
-#{FInd.find('.').to_a.join("\n")}
-#{FInd.find(build_dir).to_a.join("\n")}
+#{Find.find('.').to_a.join("\n")}
+#{Find.find(build_dir).to_a.join("\n")}
   CONF
 end
 
