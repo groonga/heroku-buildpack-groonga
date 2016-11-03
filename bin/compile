@@ -56,7 +56,6 @@ end
 def remove_needless_files(prefix)
   rm(Dir.glob("#{prefix}/lib/**/*.a"))
   rm_r("#{prefix}/share/groonga/examples")
-  rm_r("#{prefix}/share/groonga/images")
 end
 
 def link_executales(prefix)
