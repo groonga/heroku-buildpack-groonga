@@ -76,7 +76,7 @@ http {
 end
 
 release["default_process_types"] = {
-  "web" => "sed -i'' -e \"s/%PORT%/$PORT/g\" #{app_groonga_httpd_conf} && groonga-httpd",
+  "web" => "sed -i '' -e \"s/%PORT%/$PORT/g\" #{app_groonga_httpd_conf} && groonga-httpd",
 }
 
 puts(release.to_yaml)
